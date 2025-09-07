@@ -32,5 +32,10 @@
 			"world": "MAIN",
 			"run_at": "document_start"
 		}
-	]
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "innertube_proxy_extension@534"
+		}
+	}
 }
