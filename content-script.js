@@ -1,0 +1,20 @@
+async function handle_hf_message(cs_message) {
+	// Unpack the message
+	const structured_message = cs_message.detail;
+	const message_id = structured_message.message_id;
+	const message = structured_message.message;
+	// We want to send the message upstream to the background script, and get the response
+	const srb_structured_message = {
+		action: "proxy",
+		content: message
+	};
+	const response = await browser.runtime.sendMessage(srb_structured_message);
+	const out_message = `(hello from content-script.js)`;
+	// Assemble and send the response
+	const hf_message = new CustomEvent(`itpe_in ${message_id}`, {
+		detail: out_message
+	});
+	window.dispatchEvent(hf_message);
+}
+
+window.addEventListener("itpe_out", handle_hf_message);
