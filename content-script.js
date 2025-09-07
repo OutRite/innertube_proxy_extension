@@ -9,10 +9,10 @@ async function handle_hf_message(cs_message) {
 		content: message
 	};
 	const response = await browser.runtime.sendMessage(srb_structured_message);
-	const out_message = `(hello from content-script.js)`;
+	const finresponse = JSON.stringify(response);
 	// Assemble and send the response
 	const hf_message = new CustomEvent(`itpe_in ${message_id}`, {
-		detail: out_message
+		detail: finresponse
 	});
 	window.dispatchEvent(hf_message);
 }

@@ -21,12 +21,8 @@ async function communicate_with_content_script(message) {
 	});
 }
 
-async function neofetch(resource, options) {
+async function ipe_neofetch(resource, options) {
 	// FIXME: This does not account for the possibility that resource is a Request object. Does YT ever do this?
-	console.log(`neofetch called`);
-	//console.log(resource);
-	console.log(options);
-	console.log("getting basic data");
 	let original_url = "";
 	if (resource.url) {
 		// YouTube does some weird thing to certain data: URLs to make them appear as innertube URLs, afaict it's an adblock detection mechanism given the fake responses.
@@ -36,18 +32,13 @@ async function neofetch(resource, options) {
 	} else {
 		original_url = resource.toString();
 	}
-	console.log('setting original');
 	const original_url_object = new URL(original_url);
-	console.log('setting hostname');
 	const original_hostname = original_url_object.hostname;
-	console.log('setting pathname');
 	const original_pathname = original_url_object.pathname;
-	console.log('checking req type');
 	if ((original_hostname == "youtube.com" || original_hostname.endsWith(".youtube.com")) && original_pathname.startsWith("/youtubei/")) {
-		console.log("innertube request detected");
 		const original_headers = [...resource.headers.entries()];
 		const rsclone = resource.clone();
-		const original_body = rsclone.text();
+		const original_body = await rsclone.text();
 		const original_method = resource.method;
 		const cs_reqdata = {
 			url: original_url,
@@ -55,17 +46,26 @@ async function neofetch(resource, options) {
 			body: original_body,
 			method: original_method
 		};
-		const response_data = await communicate_with_content_script(cs_reqdata);
-		console.log(`Received from content script: ${response_data.detail}`);
-		const real_response = await ipe_uhfetch(resource, options);
-		console.log(real_response);
-		return real_response;
-		//return ipe_uhfetch(resource, options);
+		const serialized_response_data = await communicate_with_content_script(cs_reqdata);
+		const response_data = JSON.parse(serialized_response_data.detail);
+		const response_body = response_data.body;
+		const response_status_code = response_data.status_code;
+		const response_headers = response_data.headers;
+		const response_headers_assembled = new Headers(response_headers);
+		const final_response = new Response(response_body, {
+			status: response_status_code,
+			statusText: "",
+			headers: response_headers_assembled
+		});
+		//const real_response = await ipe_uhfetch(resource, options);
+		//console.log(real_response);
+		//return real_response;
+		return final_response;
 	} else {
 		// This is not an innertube request, so no modification is necessary.
 		return ipe_uhfetch(resource, options);
 	}
 }
 
-window.fetch = neofetch;
+window.fetch = ipe_neofetch;
 
