@@ -1,5 +1,5 @@
 # innertube_proxy_extension
-This is an extension that redirects YouTube's Innertube API requests to innertube_proxy_server.
+This is an extension that redirects YouTube's Innertube API requests to [innertube_proxy_server](https://github.com/OutRite/innertube_proxy_server).
 
 ## Notes
 This extension is currently untested on Chromium-based browsers and will probably not work.
