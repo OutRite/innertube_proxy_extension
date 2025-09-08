@@ -3,6 +3,9 @@ async function handle_hf_message(cs_message) {
 	const structured_message = cs_message.detail;
 	const message_id = structured_message.message_id;
 	const message = structured_message.message;
+	if (typeof message.body === "object") {
+		message.body = message.body.toString().split(","); // convert uint8array -> array
+	}
 	// We want to send the message upstream to the background script, and get the response
 	const srb_structured_message = {
 		action: "proxy",

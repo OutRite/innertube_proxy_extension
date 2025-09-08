@@ -2,7 +2,7 @@
 This is an extension that redirects YouTube's Innertube API requests to [innertube_proxy_server](https://github.com/OutRite/innertube_proxy_server).
 
 ## Notes
-This extension is currently untested on Chromium-based browsers and will probably not work.
+This extension has been tested on both Firefox and Chrome, and seems to work fine on both.
 
 This extension hooks fetch() using an injected script, which communicates innertube requests to the background script
 via a middleman content script that communicates using DOM events and extension events. As such, I imagine this is a

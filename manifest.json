@@ -13,10 +13,8 @@
 		"http://localhost:53417/*"
 	],
 	"background": {
-		"scripts": [
-			"browser-polyfill.min.js",
-			"background.js"
-		]
+		"service_worker": "background.js",
+		"scripts": ["background.js"]
 	},
 	"content_scripts": [
 		{
