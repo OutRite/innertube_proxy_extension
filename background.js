@@ -33,7 +33,9 @@ async function proxy_listener(message, sender, send_response) {
 	});
 	let cookie_header = "";
 	for (const cookie of cookies) {
-		cookie_header += "; "+cookie.name + "=" + cookie.value
+		if (!cookie.name.startsWith("ST-")) {
+			cookie_header += "; "+cookie.name + "=" + cookie.value
+		}
 	}
 	cookie_header = cookie_header.substr(2);
 	proper_headers["X-Cookie"] = cookie_header;
