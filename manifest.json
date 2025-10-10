@@ -7,14 +7,18 @@
 		"48": "images/icon-48.png",
 		"128": "images/icon-128.png"
 	},
-	"permissions": ["cookies"],
+	"permissions": ["cookies", "storage"],
 	"host_permissions": [
 		"*://*.youtube.com/*",
-		"http://localhost:53417/*"
+		"*://*/*"
 	],
 	"background": {
 		"service_worker": "background.js",
 		"scripts": ["background.js"]
+	},
+	"options_ui": {
+		"page": "options.html",
+		"open_in_tab": false
 	},
 	"content_scripts": [
 		{

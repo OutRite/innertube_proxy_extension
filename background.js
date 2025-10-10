@@ -21,8 +21,11 @@ async function proxy_listener(message, sender, send_response) {
 	}
 	const original_method = request_data.method;
 	const new_url = new URL(original_url);
-	new_url.host = "localhost:53417";
-	new_url.protocol = "http";
+	const stored_endpoint = await browser.storage.sync.get("endpoint");
+	const endpoint = stored_endpoint.endpoint || "http://localhost:53417";
+	const endpoint_url = new URL(endpoint);
+	new_url.host = endpoint_url.host;
+	new_url.protocol = endpoint_url.protocol;
 	const proper_headers = {};
 	for (const header_pair of original_headers) {
 		proper_headers[header_pair[0]] = header_pair[1]
