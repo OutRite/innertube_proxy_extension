@@ -6,7 +6,8 @@ async function save_options(e) {
 }
 
 async function initialize_options() {
-	const endpoint = await browser.storage.sync.get("endpoint").endpoint || "http://localhost:53417";
+	const endpoint_pr = await browser.storage.sync.get("endpoint")
+	const endpoint = endpoint_pr.endpoint || "http://localhost:53417";
 	document.getElementById("endpoint").value = endpoint;
 }
 
