@@ -3,22 +3,12 @@ async function handle_hf_message(cs_message) {
 	const structured_message = cs_message.detail;
 	const message_id = structured_message.message_id;
 	const message = structured_message.message;
-	const xmessage = {};
-	let body = null;
-	if (typeof message.body === "object") {
-		const u8a_copy = new Uint8Array(message.body.length);
-		u8a_copy.set(message.body);
-		body = u8a_copy;
-	} else {
-		body = message.body;
-	}
-	xmessage.body = body;
-	xmessage.url = message.url;
-	xmessage.headers = message.headers;
-	xmessage.method = message.method;
-	if (typeof message.body === "object") {
-		xmessage.body = xmessage.body.toString().split(","); // convert uint8array -> array
-	}
+	const xmessage = {
+		url: message.url,
+		headers: message.headers,
+		method: message.method,
+		body: message.body
+	};
 	// We want to send the message upstream to the background script, and get the response
 	const srb_structured_message = {
 		action: "proxy",

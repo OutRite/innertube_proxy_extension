@@ -42,7 +42,8 @@ async function ipe_neofetch(resource, options) {
 	if ((original_hostname == "youtube.com" || original_hostname.endsWith(".youtube.com")) && original_pathname.startsWith("/youtubei/")) {
 		const original_headers = [...resource.headers.entries()];
 		const rsclone = resource.clone();
-		const original_body = await rsclone.text();
+		const original_buffer = await rsclone.arrayBuffer();
+		const original_body = Array.from(new Uint8Array(original_buffer));
 		const original_method = resource.method;
 		const cs_reqdata = {
 			url: original_url,

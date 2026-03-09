@@ -16,9 +16,9 @@ async function proxy_listener(message, sender, send_response) {
 	const original_url = request_data.url;
 	const original_headers = request_data.headers;
 	let original_body = request_data.body;
-	if (typeof original_body === "object") {
-		original_body = new Uint8Array(original_body); // convert array -> uint8array
-	}
+	//if (typeof original_body === "object") {
+	//	original_body = new Uint8Array(original_body); // convert array -> uint8array
+	//}
 	const original_method = request_data.method;
 	const new_url = new URL(original_url);
 	const stored_endpoint = await browser.storage.sync.get("endpoint");
