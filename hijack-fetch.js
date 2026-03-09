@@ -72,19 +72,32 @@ async function ipe_neofetch(resource, options) {
 	}
 }
 
-function ipe_neoxhr(original_body) {
+async function ipe_neoxhr(original_body) {
 	const original_url = this.url;
 	const original_url_object = new URL(original_url, window.location.href);
 	const original_url_resolved = original_url_object.href;
 	const original_hostname = original_url_object.hostname;
 	const original_pathname = original_url_object.pathname;
 	if ((original_hostname == "youtube.com" || original_hostname.endsWith(".youtube.com")) && original_pathname.startsWith("/youtubei/")) {
+		let normalized_body = [];
+		if (original_body instanceof ArrayBuffer) {
+			normalized_body = Array.from(new Uint8Array(original_body));
+		} else if (ArrayBuffer.isView(original_body)) {
+			normalized_body = Array.from(new Uint8Array(original_body.buffer, original_body.byteOffset, original_body.byteLength));
+		} else if (original_body instanceof Blob) {
+			const buffer = await original_body.arrayBuffer();
+			normalized_body = Array.from(new Uint8Array(buffer));
+		} else if (typeof original_body === "string") {
+			normalized_body = Array.from(new TextEncoder().encode(original_body));
+		} else if (original_body === null || original_body === undefined) {
+			normalized_body = [];
+		}
 		const original_headers = this.headers;
 		const original_method = this.method;
 		const cs_reqdata = {
 			url: original_url_resolved,
 			headers: original_headers,
-			body: original_body,
+			body: normalized_body,
 			method: original_method
 		};
 		const xhr_this = this;

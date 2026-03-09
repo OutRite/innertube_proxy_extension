@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "Innertube Proxy",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Proxies YouTube Innertube requests to innertube_proxy_server.",
 	"icons": {
 		"48": "images/icon-48.png",
